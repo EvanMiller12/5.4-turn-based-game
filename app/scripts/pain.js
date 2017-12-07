@@ -1,46 +1,43 @@
-var _= require('underscore');
+var _ = require('underscore');
 
-var hit = true;
-var miss = false;
-//painInflicted means that it has a 50/50 chance of hitting
+/******
+ 
+ Functions to determine the chance a player 
+ or enemy will be hit by an attack
+ 
+ *****/
 
-var painInflicted = function(){
-  var randomNum = _.random(1, 2)
+"use strict";
 
-  if (randomNum == 1){
-    return true
-  }else{
-    return false
-    }
-};
-console.log(painInflicted());
-
-//painInflicted2 means that it has a 1 in 3 chance of hitting
-
-var painInflicted2 = function(){
-  var randomNum2 = _.random(1, 3)
-
-  if (randomNum2 == 3){
-    return true
-  }else{
-    return false
+  // 50% chance of a successful attack
+  var basicHit = function(){
+    var randomNum = _.random(1, 2);
+    
+    var hitOrMiss = (randomNum === 1) ? true :  false;
+    
+    return hitOrMiss;
   }
-};
-console.log(painInflicted2());
 
-//painInflicted3 means that ti has a 1 in 5 chance of hitting
+  // 33% chance of a successful attack
+  var strongHit = function(){
+    var randomNum2 = _.random(1, 3);
 
-var painInflicted3 = function(){
-  var randomNum3 = _.random(1, 5)
-  if (randomNum3 == 5){
-    return true
-  }else{
-    return false
+    var hitOrMiss = (randomNum2 === 3) ? true : false;
+
+    return hitOrMiss;
   }
-};
-console.log(painInflicted3());
+
+  // 20% chance of a successful attack
+  var criticalHit = function(){
+    var randomNum3 = _.random(1, 5);
+    
+    var hitOrMiss = (randomNum3 === 5) ? true : false;
+    
+    return hitOrMiss;
+  };
+
 module.exports = {
-  painInflicted:painInflicted,
-  painInflicted2:painInflicted2,
-  painInflicted3:painInflicted3
-};
+  basicHit,
+  strongHit,
+  criticalHit
+}
