@@ -1,126 +1,178 @@
-
 var $ =  require('jquery');
-var models = require('./models');
 var Handlebars = require('handlebars');
 var _ = require('underscore');
 
-var splashTemplate = require('../templates/splash.hbs');
+// Functions to determine the chance of a hit
+var percentChance = require('./pain');
+
+// Models
+var Hero = require('./models/hero').Hero;
+var Villain = require('./models/villain').Villain;
+
+// Hero Instances
+var bart = require('./collections/heros').bart;
+var lisa = require('./collections/heros').lisa;
+var ned = require('./collections/heros').ned;
+var maggie = require('./collections/heros').maggie;
+
+
+// Villain Instances
+var homer = require('./collections/villains').homer;
+var krusty= require('./collections/villains').krusty;
+var nelson= require('./collections/villains').nelson;
+
+// Full Screen Templates
+var startModalTemplate = require('../templates/start-modal.hbs');
 var gameTemplate = require('../templates/fight.hbs');
-var villainTemplate = require('../templates/villain.hbs');
-var winnerTemplate = require('../templates/winner.hbs');
-var loserTemplate = require('../templates/loser.hbs');
+var winnerTemplate = require('../templates/winnerOrLoser/winner.hbs');
+var loserTemplate = require('../templates/winnerOrLoser/loser.hbs');
 
-var bart = new models.Hero({
-  name: "bart",
-  image: "images/BARTslingshot-psd.png",
-  health: 120,
-  animation: "shake-opacity",
-  attack: 28,
-  // kick: 30,
-  // donut: 50
-});
+// Hero and Villain Templates
+var enemyTemplate = require('../templates/enemy/villain.hbs');
+var playerTemplate = require('../templates/player/hero.hbs');
 
-var lisa = new models.Hero({
-  name: "lisa",
-  image: "images/lisa.png",
-  health: 105,
-  animation: 'shake-vertical',
-  attack: 32,
-  // kick: 27,
-  // donut: 41
-});
+var actionsTemplate = require('../templates/player/actions.hbs');
 
-var ned = new models.Hero({
-  name: "ned",
-  image: "images/Ned_Flanders.png",
-  health: 99,
-  animation: 'shake-vertical',
-  attack: 30,
-  // kick: 15,
-  // donut: 55
-});
+// Fight Text Templates
+var introText = require('../templates/fight-intro-text.hbs');
 
-var heroArray = [bart, lisa, ned];
+// var enemyHitText = require('../templates/enemy/enemyFightText/enemy-hit-text.hbs');
+// var enemyMissText = require('../templates/enemy/enemyFightText/enemy-miss-text.hbs');
+// var playerHitText = require('../templates/player/playerFightText/player-hit-text.hbs');
+// var playerMissText = require('../templates/player/playerFightText/player-miss-text.hbs');
+ 
+ var app = $('#app');
+ var audio = $('.music');
 
-var homer = new models.Villain({
-  name: 'homer',
-  image: 'images/homer-doh.png',
-  health: 118,
-  animation: 'shake-slow',
-  attack: 19,
-  // sneeze: 10,
-  // burp: 30
-});
-
-var krusty = new models.Villain({
-  name: 'krusty',
-  image: 'images/Krusty_The_Clown.png',
-  health: 102,
-  animation: 'shake-hard',
-  attack: 21,
-  // sneeze: 19,
-  // burp: 32
-});
-
-var nelson = new models.Villain({
-  name: 'nelson',
-  image: 'images/Nelson_Muntz.png',
-  health: 120,
-  animation: 'shake-hard',
-  attack: 28,
-  // sneeze: 15,
-  // burp: 40
-});
-
-var villainArray = [homer, krusty, nelson];
-
-var selectedVillain = villainArray[_.random(villainArray.length-1)];
-var selectedHero;
-
-$('#choose-character').html(splashTemplate({heros: heroArray}));
-
-$('.start-game').on('click', function(event){
-  event.preventDefault();
-  //selects the index value of the .hero-select and
-  //sets selected hero equal to the heroArray index
-  //value equal to .hero-select index
-  selectedHero = heroArray[$('.hero-select').val()];
-
-  $('#choose-character').empty();
-  $('#choose-character').append(gameTemplate(selectedHero));
-  $(".villain-input").append(villainTemplate(selectedVillain));
-});
-
-function villainAttack(){
-  selectedHero.health -= selectedVillain.attack
-  // Character.attack(selectedVillain);
-  $('.health-bar-hero').text(selectedHero.health)
+function displayTemplate(template){
+  var currentView = app.append(template);
+  
+    addAudio('./audio/simpsons.mp3');
+  
+  return currentView;
 }
 
-function heroAttack(){
-  selectedVillain.health -= selectedHero.attack
-  $('.health-bar-villain').text(selectedVillain.health);
+function addAudio (path) {
+  
+  audio.attr('src', path)
 }
 
-function endGame(){
-  if(selectedVillain.health <= 0) {
-    $('#choose-character').empty();
-    $('.villain-input').empty();
-    $('#choose-character').append(winnerTemplate());
-    $('#choose-character').append(gameTemplate(selectedHero));
-  } else if(selectedHero.health <= 0) {
-    $('#choose-character').empty();
-    $('#choose-character').append(looserTemplate());
-      }
+var heroArray = [bart, lisa, ned, maggie];
+
+displayTemplate(startModalTemplate({heroArray}));
+
+// selects random villain and returns the villain;
+function getRandomVillain() {
+  var villainArray=[homer, krusty, nelson];
+
+  var index = _.random(0, (villainArray.length - 1));
+
+  var selectedVillain = villainArray[index];
+
+  return selectedVillain;
 }
 
-$(document).on('click','.fight-button', function(event){
-  event.preventDefault();
-    function counterAttack(enemy){
-      villainAttack();
-      endGame();
-    }
-    setTimeout(counterAttack, 2000);
-      heroAttack();
-      // endGame();
+var currentEnemy = {};
+
+function setEnemy(){
+  var enemyNode = $('.enemy-wrapper');
+  
+  currentEnemy = getRandomVillain();
+  
+  enemyNode.append(enemyTemplate(currentEnemy));
+}
+
+var currentPlayer = {};
+
+function setPlayer(player){
+  var playerNode = $('.player-wrapper');
+  
+  currentPlayer = player;
+
+  $(playerTemplate(currentPlayer)).appendTo(playerNode).hide().fadeIn(1000);
+}
+
+function displayActions() {
+  var actionsNode = $('.actions-wrapper');
+
+  actionsNode.append(actionsTemplate());
+}
+
+function displayGameText(template) {
+  var fightText = $('.fight-text');
+
+  fightText.append(template);
+}
+
+//starts game
+$('.player-select-btn').on('click', function(e){
+  e.preventDefault();
+  
+  audio.empty();
+  
+  app.empty();
+
+  displayTemplate(gameTemplate());
+  displayActions();
+  displayGameText(introText());
+  
+  setEnemy();
+
+    var selectedPlayer = _.where(heroArray, {
+      'name': $(this).text()
+    });
+
+    currentPlayer = selectedPlayer[0]; 
+  
+    setPlayer(currentPlayer);
+ });
+
+$('#app').on('click', '.punch-btn', function() {
+
+  currentPlayer.throwPunchAt(currentEnemy);
+  currentEnemy.setEnemyHbWidth();
+
+  setTimeout(function(){
+      currentEnemy.counterAttack(currentPlayer);
+      currentPlayer.setPlayerHbWidth();
+    }, 
+    2000);
+});
+
+$('#app').on('click', '.kick-btn', function() {
+
+  currentPlayer.throwKickAt(currentEnemy);
+  currentEnemy.setEnemyHbWidth();
+  
+  setTimeout(function(){
+      
+      currentEnemy.counterAttack(currentPlayer);
+      currentPlayer.setPlayerHbWidth();
+    }, 
+    2000);
+});
+
+$('#app').on('click', '.take-donut-btn', function() {
+  
+  currentPlayer.takeDonutFrom(currentEnemy);
+  currentEnemy.setEnemyHbWidth();
+
+  setTimeout(function(){
+      currentEnemy.counterAttack(currentPlayer);
+      currentPlayer.setPlayerHbWidth();
+    }, 
+  2000); 
+});
+
+$('#app').on('click', '.power-up-btn', function() {
+  
+  currentPlayer.increaseHealth();
+  
+  currentPlayer.setPlayerHbWidth();
+
+  setTimeout(function(){
+      currentEnemy.counterAttack(currentPlayer);
+      currentPlayer.setPlayerHbWidth();
+    }, 
+  2000);
 });

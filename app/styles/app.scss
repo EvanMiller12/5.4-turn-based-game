@@ -4,176 +4,247 @@ $icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
 
 // Import Bootstrap
 @import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
-@import '../../node_modules/csshake/scss/csshake.scss';
+// @import '../../node_modules/csshake/scss/csshake.scss';
+
+// Variables
+
+$yellow: #D8B83E;
+$white: #FFF;
+$black: #000;
 
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
-*{
+
+* {
   font-family: 'Gloria Hallelujah', cursive;
-  font-weight: bolder;
+  font-weight: bold;
 }
 
-body{
-  background: url('../images/springfield.jpg');
-  background-size: cover;
-  background-position: 0 -180px;
+html {
+  height: 100%;
 }
 
 img {
   max-width: 100%;
 }
 
+/*****
 
-.bart{
-  position: absolute;
-  margin-left: 760px;
-  margin-top: 240px;
-  height: 200px;
-  width: 100px;
-  z-index: 10;
-}
-.ned{
-  position: absolute;
-    margin-left: 760px;
-    margin-top: 211px;
-    height: 284px;
-    width: 171px;
-    z-index: 10;
-}
-.lisa{
-  position: absolute;
-    margin-top: 240px;
-    margin-left: 704px;
-    height: 200px;
-    width: 129px;
-    z-index: 10;
-}
-.health-bar-hero{
-  position: absolute;
-  width: 175px;
-  height: 20px;
-  border-radius: 10px;
-  color: white;
-  text-align: center;
-  background-color: red;
-  border: 2px solid red;
-  z-index: 10;
-  margin-top: 200px;
-  margin-left: 700px;
-}
-.nelson{
-  position: absolute;
-    margin-top: 183px;
-    margin-left: 400px;
-    height: 340px;
-    width: 186px;
-    z-index: 10;
-}
-.homer{
-  position: absolute;
-  margin-top: 105px;
-  margin-left: 400px;
-  height: 400px;
-  width: 200px;
-  z-index: 10;
-}
-.krusty{
-  position: absolute;
-  margin-top: 167px;
-  margin-left: 400px;
-  height: 364px;
-  width: 246px;
-  z-index: 10;
-}
-meter{
-  -webkit-appearance: none;
-}
-.health-bar-villain{
-  position: absolute;
-  width: 175px;
-  height: 20px;
-  border-radius: 10px;
-  color: white;
-  text-align: center;
-  background-color: red;
-  border: 2px solid red;
-  z-index: 10;
-  margin-top: 105px;
-  margin-left: 445px;
-}
-.splash-form{
-  text-align: center;
-  // margin-top: -500px;
-  font-size: 50px;
-  color: white;
-  font-family: 'Gloria Hallelujah', cursive;
+BOOTSTRAP OVERIDES
+
+*****/
+
+.container {
+  margin-top: 8%;
 }
 
-.start-game {
-  margin-top: 125px;
-  width: 320px;
-  height: 75px;
-  // background-color: #A67842;
+/*
+
+Splash Screen Styling
+
+*/
+
+.splash-bg-img {
+  background: url('../images/sky-bkgrnd.jpg');
+  background-size: cover;
+}
+
+.splash-heading {
+  font-size: 70px;
+  color: $yellow;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+.char-wrapper {
+  text-align: center;
+  padding: 7px; 
+  margin-top: 20px;
+  background-color: $white;
+  border: 1px solid $yellow;
+  border-radius: 50%;
+
+  img {
+    height: 220px;
+    padding: 5px;
+  }
+}
+
+.player-select-wrapper {
+  text-align: center;
+  margin: 50px 0;
+}
+
+.player-select-btn {
+  font-size: 20px;
+  color: $white;
+  padding: 0 15px;
   background-color: transparent;
   border-color: transparent;
+  border: 2px solid $white;
+  border-radius: 5px;
 }
-.start-game:hover{
-  background-color: white;
-  color: black;
-}
-.action{
-  margin-top: 10px;
-  margin-right: 10px;
-}
-.option3{
-  font-size: 45px;
-  text-align: center;
-  font-weight: bold;
-  font-family: 'Gloria Hallelujah', cursive;
-  color: white;
-}
-.option2{
-  position: relative;
-  text-align: center;
-  font-size: 45px;
-  font-weight: bold;
-  font-family: 'Gloria Hallelujah', cursive;
-  color: white;
-  // margin-top: -700px;
-}
-.option1{
-  text-align: center;
-  margin-left: 550px;
-  font-size: 35px;
-  margin-top: 115px;
-}
-button, input, optgroup, select, textarea {
 
-    color: inherit;
-    font: inherit;
-    width: 150px;
-    margin: 0;
+.player-select-btn:hover {
+  color: $black;
+  background-color: $white;
 }
-.fight{
-  color: white;
-  position: absolute;
-  margin-left: 700px;
-  margin-top: 150px;
+
+/*
+
+FIGHT SCREEN STYLING
+
+*/
+
+.fight-bg-img {
+  text-align: center;
+  background: url('../images/springfield-bkgrnd.png');
+  background-size: cover;
+}
+
+.fight-text {
+  width: 100%;
+  margin: 5%;
+  padding: 5%;
+  background-color: $white;
   border-radius: 10px;
-  background-color: purple;
+  border: 2px solid $black;
 }
 
-.winner{
-  padding-left: 558px;
-  font-size: 40px;
-  font-weight: bold;
+.player-wrapper {
+  position: relative;
+  margin-top: 20%;
+
+   img {
+   max-height: 200px;
+   }
 }
 
-.loser{
-  padding-left: 558px;
-  font-size: 40px;
-  font-weight: bold;
+.player-health-wrapper {
+  position: absolute;
+  top: -25%;
+  left: 40%;
+  width: 30%;
+}
+
+.player-health {
+  color: $white;
+  background-color: green;
+  width: 100%;
+  height: 18px;
+  padding: 1px 0;
+  border: 1px solid $white;
+  border-radius: 5px;
+}
+
+.player-hp {
+  font-size: 14px;
+  color: $black;
+  background-color: $white;
+  width: 25%;
+  margin-bottom: 10px;
+  border-radius: 50%;
+}
+
+.actions-wrapper {
+  min-height: 160px;
+}
+
+.actions {
+  width: 25%;
+  margin: 20px auto;
+  padding: 2% 0;
+  background-color: $white;
+  border: 1px solid $black;
+  border-radius: 5px;
+}
+
+.punch-btn,
+.kick-btn {
+  margin-right: 6px;
+}
+
+.punch-btn,
+.kick-btn,
+.take-donut-btn {
+  color: $white;
+  background-color: red;
+}
+
+.power-up-btn {
+  margin-top: 7px;
+  color: $white;
+  background-color: green;
+}
+
+.punch-btn:hover,
+.kick-btn:hover,
+.take-donut-btn:hover,
+.power-up-btn:hover {
+  color: $black;
+  background-color: transparent;
+  border: 1px solid black;
+}
+
+.enemy-wrapper {
+  position: relative;
+  margin-top: 12%;
+  
+  img {
+   max-height: 200px;
+  }
+}
+
+.enemy-health-wrapper {
+  position: absolute;
+  top: -25%;
+  left: 30%;
+  width: 30%;
+}
+
+.enemy-hp {
+  font-size: 14px;
+  color: $black;
+  background-color: $white;
+  width: 25%;
+  margin-bottom: 10px;
+  border-radius: 50%;
+}
+
+.enemy-health {
+  color: $white;
+  background-color: green;
+  width: 100%;
+  height: 18px;
+  padding: 1px 0;
+  border: 1px solid $white;
+  border-radius: 5px;
+}
+
+@media(max-width: 450px) {
+  .player-wrapper {
+    margin: 20px 0;
+  }
+
+  .enemy-wrapper {
+    margin: 20px 0;
+  }
+
+  .player-health-wrapper {
+     top: -15%;
+     width: 50%;
+  }
+
+  .enemy-health-wrapper {
+     top: -15%;
+     width: 50%;
+  }
+
+  .actions {
+    width: 80%;
+  }
 }
