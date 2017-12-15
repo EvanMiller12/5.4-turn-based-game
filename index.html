@@ -1,41 +1,22 @@
 <!doctype html>
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
-    <title>5.4 turn based game</title>
-    <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah" rel="stylesheet">
-    <link rel="stylesheet" href="css/app.css">
-</head>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+        <title>Delta Machinery</title>
+        <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah" rel="stylesheet">
+        <link rel="stylesheet" href="css/app.css">
+    </head>
 
-<body>
-  <audio
- src="./audio/simpsons.mp3"
- autoplay>
- Your browser does not support the <code>audio</code> element.
-</audio>
-
-    <div id="bg-image" class="container-fluid">
-        <div id="choose-character" class="row">
-            <!-- splash screen to choose characters splash.hbs -->
+    <body>
+        <div class="audio-wrapper">
+             <!-- audio from index.js -->
         </div>
-    </div>
-
-    <div id="fight-screen" class="container-fluid">
-        <!-- fight screen fight.hbs          -->
-
-    </div>
-
-
-    <div class="villain-input">
-        <!-- <img id="{{name}}" class="{{name}} {{animation}}" src="{{image}}" alt="hero-image"> -->
-    </div>
-
-     <script type="text/x-handlebars-template" id="villain-template">
-      <meter class="health-bar-villain" value=".5" min="0" max="100">Health</meter>
-       <img id="{{name}}" class="{{name}} {{animation}}" src="{{image}}" alt="hero-image">
-    </script>
+        
+        <div id="app" class="container fight-bg-img">
+            <!-- templates -->
+        </div>
 
     <script src="js/bundle.js"></script>
 </body>
