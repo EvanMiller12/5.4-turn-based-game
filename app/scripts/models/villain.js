@@ -15,9 +15,20 @@ function Villain(options){
 
 Villain.prototype.throwElbowAt = function(player) {
   
-  player.currentHealth = (pain.basicHit()) ? 
+  var playerFeedback = $('.fight-text');
+  var playerNode = $('.player-wrapper');
+
+  var basicChance = pain.basicHit();
+
+  var elbowMiss = (player.powerUp - 2);
+  
+  (basicChance) ? 
       player.currentHealth -= this.elbowDamage : 
-      player.currentHealth += (player.powerUp - 2);
+      player.currentHealth += elbowMiss;
+
+  (basicChance) ? 
+      playerFeedback.text(this.name + ' hit you for ' + this.elbowDamage) :
+      playerFeedback.text(this.name + ' missed with an elbow you gained ' + elbowMiss + ' hp!');
 
       (player.currentHealth >= player.maxHealth) ?
           player.currentHealth = player.maxHealth :
@@ -26,13 +37,36 @@ Villain.prototype.throwElbowAt = function(player) {
       (player.currentHealth <= 0) ? 
           player.currentHealth = 0 : 
           player.currentHealth;
+
+      if (basicChance) {
+      playerNode.animate({
+        opacity: 0.35
+      }, 
+      300, 
+      function () {
+        playerNode.animate({
+          opacity: 1
+        });
+      });
+    }
 };
 
 Villain.prototype.burpOn = function(player) {
   
-  player.currentHealth = (pain.strongHit()) ? 
+  var playerFeedback = $('.fight-text');
+  var playerNode = $('.player-wrapper');
+
+  var strongChance = pain.strongHit();
+
+  var burpMiss = (player.powerUp - 4);
+
+  (strongChance) ? 
       player.currentHealth -= this.burpDamage : 
-      player.currentHealth += player.powerUp;
+      player.currentHealth += burpMiss;
+
+  (strongChance) ? 
+      playerFeedback.text(this.name + ' hit you for ' + this.burpDamage) :
+      playerFeedback.text('you dodged a burp and gained ' + burpMiss + ' hp!');
 
       (player.currentHealth >= player.maxHealth) ?
           player.currentHealth = player.maxHealth :
@@ -41,45 +75,83 @@ Villain.prototype.burpOn = function(player) {
       (player.currentHealth <= 0) ? 
           player.currentHealth = 0 : 
           player.currentHealth;
+
+    if (strongChance) {
+      playerNode.animate({
+        opacity: 0.25,
+        marginLeft: "15"
+      }, 
+      400, 
+      function () {
+        playerNode.animate({
+          opacity: 1,
+          marginRight: "15"
+        });
+      });
+    }
 };
 
 Villain.prototype.sneezeOn = function(player) {
   
-  player.currentHealth = (pain.criticalHit()) ? 
+ var playerFeedback = $('.fight-text');
+ var playerNode = $('.player-wrapper');
+
+  var criticalChance = pain.criticalHit();
+
+  var sneezeMiss = (player.powerUp - 6);
+   
+ (criticalChance) ? 
       player.currentHealth -= this.sneezeDamage : 
-      player.currentHealth += player.powerUp;
+      player.currentHealth += sneezeMiss;
+  
+  (criticalChance) ? 
+      playerFeedback.text(this.name + ' hit you for ' + this.sneezeDamage) :
+      playerFeedback.text('you dodged a burp and gained ' + sneezeMiss + ' hp!');
 
-      (player.currentHealth >= player.maxHealth) ?
-          player.currentHealth = player.maxHealth :
-          player.currentHealth;
+    (player.currentHealth >= player.maxHealth) ?
+        player.currentHealth = player.maxHealth :
+        player.currentHealth;
 
-      (player.currentHealth <= 0) ? 
-          player.currentHealth = 0 : 
-          player.currentHealth;
+    (player.currentHealth <= 0) ? 
+        player.currentHealth = 0 : 
+        player.currentHealth;
+
+    if (criticalChance) {
+      playerNode.animate({
+        opacity: 0.15,
+        marginLeft: "20"
+      }, 
+      400, 
+      function () {
+        playerNode.animate({
+          opacity: 1,
+          marginRight: "20"
+        });
+      });
+    }
 };
 
 Villain.prototype.counterAttack = function(player) {
-  
   var enemyHealth = this.currentHealth;
   var playerHealth = player.currentHealth;
 
-  if(enemyHealth < 50 && playerHealth > 70) {
-   
-    this.currentHealth += this.powerUp; 
-  } 
-  else if (playerHealth < 40) {
-   
-    this.sneezeOn(player);
-  
-  } 
-  else if (playerHealth > 75) {
-  
-    this.burpOn(player); 
-  } 
-  else {
-   
-    this.throwElbowAt(player);
-  }
+    if(enemyHealth < 40 && playerHealth > 60) {
+     
+      this.currentHealth += this.powerUp; 
+    } 
+    else if (playerHealth < 30) {
+     
+      this.sneezeOn(player);
+    
+    } 
+    else if (playerHealth > 70) {
+    
+      this.burpOn(player); 
+    } 
+    else {
+     
+      this.throwElbowAt(player);
+    }
 }
 
 Villain.prototype.setEnemyHbWidth = function () {
@@ -93,7 +165,6 @@ Villain.prototype.setEnemyHbWidth = function () {
       enemyHealthBarNode.css('background-color', 'red') : 
       enemyHealthBarNode.css('background-color', 'green');
 }
-
 
 module.exports = {
   Villain

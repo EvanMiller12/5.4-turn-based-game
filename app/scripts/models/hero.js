@@ -14,11 +14,21 @@ function Hero(options){
 };
 
 Hero.prototype.throwPunchAt = function(enemy) {
+  var playerFeedback = $('.fight-text');
+  var enemyNode = $( ".enemy-wrapper" );
 
-  enemy.currentHealth = (pain.basicHit()) ? 
+  var basicChance = pain.basicHit();
+
+  var punchMiss = (enemy.powerUp - 3);
+
+  (basicChance) ? 
       enemy.currentHealth -= this.punchDamage : 
-      enemy.currentHealth += (enemy.powerUp -2);
+      enemy.currentHealth += punchMiss;
 
+  (basicChance) ? 
+      playerFeedback.text('you hit ' + enemy.name + ' for ' + this.punchDamage) :
+      playerFeedback.text('you missed! ' + enemy.name + ' gained ' + punchMiss + ' hp!');
+      
       (enemy.currentHealth >= enemy.maxHealth) ?
           enemy.currentHealth = enemy.maxHealth :
           enemy.currentHealth;
@@ -26,13 +36,36 @@ Hero.prototype.throwPunchAt = function(enemy) {
       (enemy.currentHealth <= 0) ? 
           enemy.currentHealth = 0 : 
           enemy.currentHealth;
+
+    if (basicChance) {
+      enemyNode.animate({
+        opacity: 0.35,
+      }, 
+      300, 
+      function () {
+        enemyNode.animate({
+          opacity: 1,
+        });
+      });
+    }
+
 };
 
 Hero.prototype.throwKickAt = function(enemy) {
+  var playerFeedback = $('.fight-text');
+  var enemyNode = $( ".enemy-wrapper" );
+
+ var strongChance = pain.strongHit();
   
-  enemy.currentHealth = (pain.strongHit()) ? 
-      enemy.currentHealth -= this.kickDamage : 
-      enemy.currentHealth += (enemy.powerUp - 5);
+ var kickMiss = (enemy.powerUp - 5);
+
+  (strongChance) ? 
+    enemy.currentHealth -= this.kickDamage : 
+    enemy.currentHealth += kickMiss;
+  
+    (strongChance) ?
+      playerFeedback.text('you hit ' + enemy.name + ' for ' + this.kickDamage) :
+      playerFeedback.text('you missed! ' + enemy.name + ' gained ' + kickMiss + ' hp!');
 
       (enemy.currentHealth >= enemy.maxHealth) ?
           enemy.currentHealth = enemy.maxHealth :
@@ -41,13 +74,37 @@ Hero.prototype.throwKickAt = function(enemy) {
       (enemy.currentHealth <= 0) ? 
       enemy.currentHealth = 0 : 
       enemy.currentHealth;
+
+     if (strongChance) {
+      enemyNode.animate({
+        opacity: 0.25,
+        marginLeft: "15",
+      }, 
+      400, 
+        function () {
+          enemyNode.animate({
+            opacity: 1,
+            marginRight: "15"
+          });
+        });
+    }
 };
 
 Hero.prototype.takeDonutFrom = function(enemy) {
- 
-  enemy.currentHealth = (pain.criticalHit()) ? 
+  var playerFeedback = $('.fight-text');
+  var enemyNode = $( ".enemy-wrapper" );
+
+  var criticalChance = pain.criticalHit();
+
+  var donutMiss = (enemy.powerUp - 7);
+
+ (criticalChance) ? 
       enemy.currentHealth -= this.donutDamage : 
-      enemy.currentHealth += (enemy.powerUp - 7);
+      enemy.currentHealth += donutMiss;
+
+ (criticalChance) ?
+    playerFeedback.text('you hit ' + enemy.name + ' for ' + this.donutDamage) :
+    playerFeedback.text('you missed! ' + enemy.name + ' gained ' + donutMiss + ' hp!');
 
       (enemy.currentHealth >= enemy.maxHealth) ?
           enemy.currentHealth = enemy.maxHealth :
@@ -56,13 +113,31 @@ Hero.prototype.takeDonutFrom = function(enemy) {
       (enemy.currentHealth <= 0) ? 
       enemy.currentHealth = 0 : 
       enemy.currentHealth;
+
+    if (criticalChance) {
+      enemyNode.animate({
+        opacity: 0.15,
+        marginLeft: "25"
+      }, 
+      400, 
+      function () {
+      enemyNode.animate({
+          opacity: 1,
+          marginRight: "25"
+        });
+      });
+    }
 };
 
 Hero.prototype.increaseHealth = function() {
-  
-  this.currentHealth = (this.currentHealth > 0 && this.currentHealth < (this.maxHealth - this.powerUp)) ? 
+  var playerFeedback = $('.fight-text');
+
+  (this.currentHealth > 0 && (this.currentHealth < (this.maxHealth - this.powerUp))) ? 
       this.currentHealth += this.powerUp :
       this.currentHealth = this.maxHealth;
+
+    playerFeedback.text('you increased ' + this.name + 's health by ' + this.powerUp);
+
 };
 
 Hero.prototype.setPlayerHbWidth = function() {

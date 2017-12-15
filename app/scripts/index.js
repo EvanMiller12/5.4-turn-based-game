@@ -33,28 +33,32 @@ var playerTemplate = require('../templates/player/hero.hbs');
 
 var actionsTemplate = require('../templates/player/actions.hbs');
 
-// Fight Text Templates
+// Fight Text intro Template
 var introText = require('../templates/fight-intro-text.hbs');
-
-// var enemyHitText = require('../templates/enemy/enemyFightText/enemy-hit-text.hbs');
-// var enemyMissText = require('../templates/enemy/enemyFightText/enemy-miss-text.hbs');
-// var playerHitText = require('../templates/player/playerFightText/player-hit-text.hbs');
-// var playerMissText = require('../templates/player/playerFightText/player-miss-text.hbs');
  
  var app = $('#app');
- var audio = $('.music');
+ var audioNode = $('.audio-wrapper');
+
+function addAudio (path) {
+  
+  audioNode.append('<audio class="audio-src" autoplay></audio>');
+  
+  var audioSrc = $('.audio-src');
+  
+  audioSrc.attr('src', path);
+}
+
+function removeAudio (){
+  audioNode.remove();
+}
 
 function displayTemplate(template){
+
   var currentView = app.append(template);
   
     addAudio('./audio/simpsons.mp3');
   
   return currentView;
-}
-
-function addAudio (path) {
-  
-  audio.attr('src', path)
 }
 
 var heroArray = [bart, lisa, ned, maggie];
@@ -63,6 +67,7 @@ displayTemplate(startModalTemplate({heroArray}));
 
 // selects random villain and returns the villain;
 function getRandomVillain() {
+
   var villainArray=[homer, krusty, nelson];
 
   var index = _.random(0, (villainArray.length - 1));
@@ -75,27 +80,36 @@ function getRandomVillain() {
 var currentEnemy = {};
 
 function setEnemy(){
+
   var enemyNode = $('.enemy-wrapper');
   
   currentEnemy = getRandomVillain();
   
-  enemyNode.append(enemyTemplate(currentEnemy));
+  $(enemyTemplate(currentEnemy)).appendTo(enemyNode).hide().fadeIn(2000);
 }
 
 var currentPlayer = {};
 
 function setPlayer(player){
+
   var playerNode = $('.player-wrapper');
   
   currentPlayer = player;
 
-  $(playerTemplate(currentPlayer)).appendTo(playerNode).hide().fadeIn(1000);
+  $(playerTemplate(currentPlayer)).appendTo(playerNode).hide().fadeIn(2000);
 }
 
 function displayActions() {
   var actionsNode = $('.actions-wrapper');
+  
+ $(actionsTemplate()).appendTo(actionsNode).hide().fadeIn(500);
 
-  actionsNode.append(actionsTemplate());
+}
+
+function hideActions() {
+  var actionsNode = $('.actions-wrapper');
+
+  actionsNode.empty();
 }
 
 function displayGameText(template) {
@@ -104,12 +118,36 @@ function displayGameText(template) {
   fightText.append(template);
 }
 
+var checkLoss = function(player) {
+  
+  var loss;
+
+  (player.currentHealth <= 0) ? loss = true : loss = false;
+
+    if (loss === true) {
+      app.empty();
+      displayTemplate(loserTemplate(currentPlayer));
+    }
+}
+
+var checkWin = function(enemy) {
+  
+  var win;
+
+  (enemy.currentHealth <= 0) ? win = true : win = false;
+
+    if (win === true) {
+      app.empty();
+      displayTemplate(winnerTemplate(currentPlayer));
+    }
+}
+
 //starts game
 $('.player-select-btn').on('click', function(e){
+  
   e.preventDefault();
   
-  audio.empty();
-  
+  removeAudio();
   app.empty();
 
   displayTemplate(gameTemplate());
@@ -127,52 +165,78 @@ $('.player-select-btn').on('click', function(e){
     setPlayer(currentPlayer);
  });
 
-$('#app').on('click', '.punch-btn', function() {
+app.on('click', '.punch-btn', function() {
 
-  currentPlayer.throwPunchAt(currentEnemy);
-  currentEnemy.setEnemyHbWidth();
+    currentPlayer.throwPunchAt(currentEnemy);
+    currentEnemy.setEnemyHbWidth();
+    hideActions();
 
-  setTimeout(function(){
-      currentEnemy.counterAttack(currentPlayer);
-      currentPlayer.setPlayerHbWidth();
-    }, 
-    2000);
+    checkWin(currentEnemy);
+
+      setTimeout(function(){
+        currentEnemy.counterAttack(currentPlayer);
+        currentPlayer.setPlayerHbWidth();
+        checkLoss(currentPlayer);
+        displayActions();
+      }, 
+      3000);
+  
 });
 
-$('#app').on('click', '.kick-btn', function() {
+app.on('click', '.kick-btn', function() {
 
   currentPlayer.throwKickAt(currentEnemy);
   currentEnemy.setEnemyHbWidth();
   
+  hideActions();
+
+  checkWin(currentEnemy);
+
   setTimeout(function(){
       
       currentEnemy.counterAttack(currentPlayer);
       currentPlayer.setPlayerHbWidth();
+      checkLoss(currentPlayer);
+      displayActions();
     }, 
-    2000);
+    3000);
 });
 
-$('#app').on('click', '.take-donut-btn', function() {
+app.on('click', '.take-donut-btn', function() {
   
   currentPlayer.takeDonutFrom(currentEnemy);
   currentEnemy.setEnemyHbWidth();
+  
+  hideActions();
+
+  checkWin(currentEnemy);
 
   setTimeout(function(){
       currentEnemy.counterAttack(currentPlayer);
       currentPlayer.setPlayerHbWidth();
+      checkLoss(currentPlayer);
+      displayActions();
     }, 
-  2000); 
+  3000); 
 });
 
-$('#app').on('click', '.power-up-btn', function() {
+app.on('click', '.power-up-btn', function() {
   
   currentPlayer.increaseHealth();
   
   currentPlayer.setPlayerHbWidth();
 
+  hideActions();
+
   setTimeout(function(){
       currentEnemy.counterAttack(currentPlayer);
       currentPlayer.setPlayerHbWidth();
+      checkLoss(currentPlayer);
+      displayActions();
     }, 
-  2000);
+  3000);
+});
+
+app.on('click', '.play-again', function(){
+  location.reload();
 });

@@ -23,9 +23,9 @@ $black: #000;
   font-weight: bold;
 }
 
-html {
-  height: 100%;
-}
+// html {
+//   height: 100%;
+// }
 
 img {
   max-width: 100%;
@@ -107,9 +107,9 @@ FIGHT SCREEN STYLING
 }
 
 .fight-text {
-  width: 100%;
+  height: 175px;
   margin: 5%;
-  padding: 5%;
+  padding: 7px;
   background-color: $white;
   border-radius: 10px;
   border: 2px solid $black;
@@ -117,6 +117,7 @@ FIGHT SCREEN STYLING
 
 .player-wrapper {
   position: relative;
+  max-width: 100%;
   margin-top: 20%;
 
    img {
@@ -145,9 +146,9 @@ FIGHT SCREEN STYLING
   font-size: 14px;
   color: $black;
   background-color: $white;
-  width: 25%;
+  width: 50%;
   margin-bottom: 10px;
-  border-radius: 50%;
+  border-radius: 10px;
 }
 
 .actions-wrapper {
@@ -192,6 +193,7 @@ FIGHT SCREEN STYLING
 
 .enemy-wrapper {
   position: relative;
+  max-width:100%;
   margin-top: 12%;
   
   img {
@@ -210,9 +212,9 @@ FIGHT SCREEN STYLING
   font-size: 14px;
   color: $black;
   background-color: $white;
-  width: 25%;
+  width: 50%;
   margin-bottom: 10px;
-  border-radius: 50%;
+  border-radius: 10px;
 }
 
 .enemy-health {
@@ -223,6 +225,54 @@ FIGHT SCREEN STYLING
   padding: 1px 0;
   border: 1px solid $white;
   border-radius: 5px;
+}
+
+/*****
+Winner and loser styling 
+*****/
+
+.winOrLose-img img {
+  max-height: 400px;
+}
+
+.play-again {
+  margin: 30px 0;
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: 2px solid $black;
+}
+
+.play-again:hover {
+  color: $white;
+  background-color: transparent;
+  border: 2px solid $white;
+}
+
+/*****
+Mobile Styling
+*****/
+
+@media(max-width: 750px) {
+  .container {
+    margin-top: 0;
+  }
+
+  .splash-heading {
+    font-size: 40px;
+  }
+
+  .fight-text {
+    text-align: left;
+    height: 235px;
+  }
+
+  .player-wrapper {
+      top: 25px;
+  }
+
+  .enemy-wrapper {
+    top: 25px;
+  }
 }
 
 @media(max-width: 450px) {
